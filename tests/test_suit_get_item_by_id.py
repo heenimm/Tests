@@ -1,7 +1,9 @@
 import pytest
 import requests
 from config import BASE_URL
+import allure
 
+@allure.step("Отправляем GET-запрос с id: {}")
 def get_request(id):
     endpoint = "item"
     url = f"{BASE_URL}/{endpoint}"
@@ -17,14 +19,15 @@ def test_successful_request_with_valid_id(id):
     assert response.status_code == 200, f"Expected status code 200, but got {response.status_code}"
 
     data = response.json()
-    assert isinstance(data, list), "Response should be a dictionary"
-    assert isinstance(data[0].get("id"), str), "ID should be a string"
-    assert isinstance(data[0].get("name"), str), "Name should be a string"
-    assert isinstance(data[0].get("price"), int), "Price should be an integer"
-    assert isinstance(data[0].get("sellerId"), int), "Seller ID should be an integer"
-    assert isinstance(data[0].get("statistics").get("contacts"), int), "Contacts should be an integer"
-    assert isinstance(data[0].get("statistics").get("likes"), int), "Likes should be an integer"
-    assert isinstance(data[0].get("statistics").get("viewCount"), int), "ViewCount should be an integer"
+    with allure.step("Проверяем статус-код"):
+        assert isinstance(data, list), "Response should be a dictionary"
+        assert isinstance(data[0].get("id"), str), "ID should be a string"
+        assert isinstance(data[0].get("name"), str), "Name should be a string"
+        assert isinstance(data[0].get("price"), int), "Price should be an integer"
+        assert isinstance(data[0].get("sellerId"), int), "Seller ID should be an integer"
+        assert isinstance(data[0].get("statistics").get("contacts"), int), "Contacts should be an integer"
+        assert isinstance(data[0].get("statistics").get("likes"), int), "Likes should be an integer"
+        assert isinstance(data[0].get("statistics").get("viewCount"), int), "ViewCount should be an integer"
 
 @pytest.mark.skip(reason="Bag - некорректный ответ сервера")
 @pytest.mark.parametrize("id, expected_status_code", [

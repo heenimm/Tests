@@ -2,6 +2,9 @@ import requests
 import pytest
 import re
 from config import BASE_URL
+import allure
+
+@allure.step("Отправляем POST-запрос")
 
 def post_request(payload):
     endpoint = "item"
@@ -21,7 +24,8 @@ def test_successful_request_with_valid_data():
         }
     }
     response = post_request(body)
-    assert response.status_code == 200
+    with allure.step("Проверяем статус-код"):
+        assert response.status_code == 200
     response_data = response.json()
     assert "status" in response_data
     assert re.match(r'^Сохранили объявление - [\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$', response_data["status"])
@@ -38,7 +42,8 @@ def test_successful_request_with_min_price():
         }
     }
     response = post_request(body)
-    assert response.status_code == 200
+    with allure.step("Проверяем статус-код"):
+        assert response.status_code == 200
     response_data = response.json()
     assert "status" in response_data
     assert re.match(r'^Сохранили объявление - [\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$', response_data["status"])
@@ -55,7 +60,8 @@ def test_successful_request_with_max_price():
         }
     }
     response = post_request(body)
-    assert response.status_code == 200
+    with allure.step("Проверяем статус-код"):
+        assert response.status_code == 200
     response_data = response.json()
     assert "status" in response_data
     assert re.match(r'^Сохранили объявление - [\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$', response_data["status"])
